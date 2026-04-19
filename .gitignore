@@ -4,6 +4,7 @@
 [Bb]uild/
 [Bb]uilds/
 [Ll]ogs/
+[Uu]serSettings/
 
 # Never ignore Asset meta data
 ![Aa]ssets/**/*.meta
@@ -37,6 +38,9 @@ ExportedObj/
 *.mdb
 *.opendb
 *.VC.db
+
+.DS_Store
+Thunbs.db
 
 # Unity3D generated meta files
 *.pidb.meta
