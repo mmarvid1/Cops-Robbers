@@ -161,6 +161,14 @@ public class Controller : MonoBehaviour
         - Actualizamos la variable currentTile del caco a la nueva casilla
         */
 
+        //Calculamos la distancia desde cada casilla a cada uno de los polis usando BFS
+        int[] distCop0= BFSFullDistance(cops[0].GetComponent<CopMove>().currentTile);
+        int[] distCop1 = BFSFullDistance(cops[1].GetComponent<CopMove>().currentTile);
+
+        //Para inicializar la mejor casilla y mejor puntuacion
+        int bestTile = -1;
+        int bestScore = -1;
+
         List<int> selectableTiles = new List<int>();
         for (int i = 0; i < Constants.NumTiles; i++)
         {
@@ -168,10 +176,21 @@ public class Controller : MonoBehaviour
 
 
         }
-        int randomIndex = Random.Range(0, selectableTiles.Count);
-        int selectedTile = selectableTiles[randomIndex];
-        robber.GetComponent<RobberMove>().MoveToTile(tiles[selectedTile]);
-        robber.GetComponent<RobberMove>().currentTile = selectedTile;
+
+
+        for(int i= 0; i < selectableTiles.Count; i++)
+        {
+            int indexTile = selectableTiles[i];
+            int score = Mathf.Min(distCop0[indexTile], distCop1[indexTile]);
+            if(score> bestScore)
+            {
+                bestScore = score;
+                bestTile =indexTile;
+            }
+        }
+        //int randomIndex = Random.Range(0, selectableTiles.Count);
+        robber.GetComponent<RobberMove>().MoveToTile(tiles[bestTile]);
+        robber.GetComponent<RobberMove>().currentTile = bestTile;
     }
 
     public void EndGame(bool end)
