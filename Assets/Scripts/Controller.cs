@@ -168,8 +168,9 @@ public class Controller : MonoBehaviour
 
         }
         int randomIndex = Random.Range(0, selectableTiles.Count);
-        robber.GetComponent<RobberMove>().MoveToTile(tiles[randomIndex]);
-        robber.GetComponent<RobberMove>().currentTile = randomIndex;
+        int selectedTile = selectableTiles[randomIndex];
+        robber.GetComponent<RobberMove>().MoveToTile(tiles[selectedTile]);
+        robber.GetComponent<RobberMove>().currentTile = selectedTile;
     }
 
     public void EndGame(bool end)
