@@ -159,7 +159,17 @@ public class Controller : MonoBehaviour
         - Movemos al caco a esa casilla
         - Actualizamos la variable currentTile del caco a la nueva casilla
         */
-        robber.GetComponent<RobberMove>().MoveToTile(tiles[robber.GetComponent<RobberMove>().currentTile]);
+
+        List<int> selectableTiles = new List<int>();
+        for(int i=0;i<Constants.NumTiles; i++)
+        {
+            if (tiles[i].selectable) selectableTiles.Add(i);
+            
+
+        }
+        int randomIndex = Random.Range(0, selectableTiles.Count);
+        robber.GetComponent<RobberMove>().MoveToTile(tiles[randomIndex]);
+        robber.GetComponent<RobberMove>().currentTile = randomIndex;
     }
 
     public void EndGame(bool end)
