@@ -71,9 +71,6 @@ public class Controller : MonoBehaviour
 
             }
         }
-
-        
-
     }
 
     //Reseteamos cada casilla: color, padre, distancia y visitada
@@ -193,8 +190,7 @@ public class Controller : MonoBehaviour
 
     public void InitGame()
     {
-        state = Constants.Init;
-         
+        state = Constants.Init;    
     }
 
     public void IncreaseRoundCount()
@@ -204,8 +200,7 @@ public class Controller : MonoBehaviour
     }
 
     public void FindSelectableTiles(bool cop)
-    {
-                 
+    {             
         int indexcurrentTile;        
 
         if (cop==true)
@@ -221,20 +216,39 @@ public class Controller : MonoBehaviour
 
         //TODO: Implementar BFS. Los nodos seleccionables los ponemos como selectable=true
         //Tendrás que cambiar este código por el BFS
-        for(int i = 0; i < Constants.NumTiles; i++)
+        //la marcamos como visitada, ponemos distancia a 0, y la metemos en la cola nodes
+        tiles[indexcurrentTile].visited = true;
+        tiles[indexcurrentTile].distance = 0;
+        nodes.Enqueue(tiles[indexcurrentTile]);
+        while (nodes.Count > 0)
         {
-            tiles[i].selectable = true;
+            Tile current = nodes.Dequeue();
+            if (current.distance < Constants.Distance)
+            {
+                foreach (int adj in current.adjacency)
+                {
+                    if (cop)
+                    {
+                        int otherCopId = (clickedCop == 0) ? 1 : 0;
+                        int otherCopTile = cops[otherCopId].GetComponent<CopMove>().currentTile;
+                        if (adj == otherCopTile) continue;
+                    }
+
+
+                    if (!tiles[adj].visited)
+                    {
+                        tiles[adj].visited = true;
+                        tiles[adj].distance = current.distance + 1;
+                        nodes.Enqueue(tiles[adj]);
+                        tiles[adj].parent = current;
+                    }
+                }
+            }
         }
-
-
-    }
-    
-   
-    
-
-    
-
-   
-
-       
+        for (int i = 0; i < Constants.NumTiles; i++)
+        {
+            //excluimos la casilla en la que estamos actualmente, y las casillas no visitadas
+            if (tiles[i].visited ==true && i!=indexcurrentTile) tiles[i].selectable = true;
+        }
+    }    
 }
